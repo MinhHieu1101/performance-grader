@@ -11,7 +11,7 @@ const errorHandler = require("./src/middleware/errorMiddleware");
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || "localhost";
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173", "*"];
 
 const corsOptions = {
   origin: allowedOrigins,
