@@ -4,10 +4,11 @@ module.exports = {
   development: {
     client: "pg",
     connection: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 5433,
+      user: process.env.DB_USER || 'myuser',
+      password: process.env.DB_PASS || 'mypassword',
+      database: process.env.DB_NAME || 'myproject_dev',
     },
     pool: { min: 0, max: 5 },
     migrations: {
