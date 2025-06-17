@@ -6,10 +6,16 @@ const morgan = require("morgan");
 const chalk = require("chalk");
 
 const authRoutes = require("./src/routes/authRoutes");
+const userRoutes = require("./src/routes/userRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
 
+const app = express();
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || "localhost";
+
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 
 const allowedOrigins = ["http://localhost:5173", "*"];
 
@@ -18,18 +24,13 @@ const corsOptions = {
   credentials: true,
 };
 
-const app = express();
-
-if (process.env.NODE_ENV !== "production") {
-  app.use(morgan("dev"));
-}
-
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // parse URL-encoded bodies
 app.use(cookieParser());
 
 app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 app.use(errorHandler);
 
