@@ -1,23 +1,82 @@
-const { db } = require("../config/knexInstance");
+const { db } = require("../config");
+const { v4: uuidv4 } = require("uuid");
 
 class UserRepository {
   constructor() {
-    this.table = "users";
+    this.userTable = "users";
+    this.roleTable = "roles";
+    this.userRolesTable = "user_roles";
   }
 
-  findByEmail = async (email) => db(this.table).where({ email }).first();
+  findByEmail = async (email) => db(this.userTable).where({ email }).first();
 
-  findById = async (id) =>
-    db(this.table)
-      .select("user_id", "username", "email", "role", "is_active")
-      .where({ user_id: id })
+  findById = async (userId) => {
+    const user = await db(this.userTable)
+      .select("user_id", "username", "email", "first_name", "last_name")
+      .where({ user_id: userId })
       .first();
 
-  create = async ({ username, email, password, role }) =>
-    db(this.table)
-      .insert({ username, email, password: password, role })
-      .returning(["user_id", "username", "email", "role"])
-      .then((rows) => rows[0]);
+    if (!user) return null;
+
+    const roles = await db(this.roleTable)
+      .join(
+        this.userRolesTable,
+        `${this.roleTable}.role_id`,
+        "=",
+        `${this.userRolesTable}.role_id`
+      )
+      .select(`${this.roleTable}.role_id`, `${this.roleTable}.name`)
+      .where({ [`${this.userRolesTable}.user_id`]: userId });
+
+    return { ...user, roles };
+  };
+
+  create = async ({ username, email, password, roles }) => {
+    const userId = uuidv4();
+
+    return db.transaction(async (trx) => {
+      await trx(this.userTable).insert({
+        user_id: userId,
+        username,
+        email,
+        password,
+      });
+
+      const roleIds = [];
+      for (const roleName of roles) {
+        let role = await trx(this.roleTable)
+          .select("role_id")
+          .where({ name: roleName })
+          .first();
+
+        /* if (!role) {
+          const [newRole] = await trx(this.roleTable)
+            .insert({ name: roleName })
+            .returning(["role_id"]);
+          role = newRole;
+        } */
+
+        roleIds.push(role.role_id);
+      }
+
+      const userRolesInserts = roleIds.map((roleId) => ({
+        user_id: userId,
+        role_id: roleId,
+      }));
+      await trx(this.userRolesTable).insert(userRolesInserts);
+
+      const createdUser = await trx(this.userTable)
+        .select("user_id", "username", "email", "first_name", "last_name")
+        .where({ user_id: userId })
+        .first();
+
+      const assignedRoles = await trx(this.roleTable)
+        .select("role_id", "name")
+        .whereIn("role_id", roleIds);
+
+      return { ...createdUser, roles: assignedRoles };
+    });
+  };
 }
 
 module.exports = new UserRepository();

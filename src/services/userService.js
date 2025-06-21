@@ -1,9 +1,29 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { db } = require("../config");
 const userRepo = require("../repositories/userRepository");
 
-class AuthService {
+class UserService {
+  register = async ({ username, email, password, roles }) => {
+    const existing = await userRepo.findByEmail(email);
+    if (existing) {
+      const err = new Error("Email already in use");
+      err.status = 409;
+      throw err;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+
+    const user = await userRepo.create({
+      username,
+      email,
+      password: hash,
+      roles,
+    });
+
+    return user;
+  };
+
   login = async ({ email, password }) => {
     const user = await userRepo.findByEmail(email);
     if (!user) {
@@ -33,24 +53,15 @@ class AuthService {
     return { user, accessToken, refreshToken };
   };
 
-  saveRefreshToken = async (userId, token) => {
-    return db("refresh_tokens")
-      .insert({ user_id: userId, token })
-      .onConflict("user_id")
-      .merge();
-  };
-
-  getRefreshToken = async (userId) => {
-    const row = await db("refresh_tokens")
-      .select("token")
-      .where({ user_id: userId })
-      .first();
-    return row?.token;
-  };
-
-  deleteRefreshToken = async (userId) => {
-    return db("refresh_tokens").where({ user_id: userId }).del();
+  getProfile = async (userId) => {
+    const user = await userRepo.findById(userId);
+    if (!user) {
+      const err = new Error("User not found");
+      err.status = 404;
+      throw err;
+    }
+    return user;
   };
 }
 
-module.exports = new AuthService();
+module.exports = new UserService();

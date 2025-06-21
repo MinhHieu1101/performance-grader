@@ -6,10 +6,19 @@ const userExistenceMiddleware = require("../middleware/userExistenceMiddleware")
 const UserController = require("../controllers/userController");
 
 router.get(
-  "/:userId",
+  "/me",
+  authMiddleware,
+  userExistenceMiddleware,
+  UserController.getMe
+);
+
+router.get(
+  "/:id",
   authMiddleware,
   userExistenceMiddleware,
   UserController.getById
 );
+
+router.post("/register", UserController.register);
 
 module.exports = router;

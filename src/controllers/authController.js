@@ -3,17 +3,6 @@ const AuthService = require("../services/authService");
 const BaseController = require("./BaseController");
 
 class AuthController extends BaseController {
-  register = BaseController.handle(async (req, res) => {
-    const { username, email, password, role } = req.body;
-    const user = await AuthService.register({
-      username,
-      email,
-      password,
-      role,
-    });
-    return this.sendSuccess(res, user, 201);
-  });
-
   login = BaseController.handle(async (req, res) => {
     const { email, password } = req.body;
     const { user, accessToken, refreshToken } = await AuthService.login({
@@ -21,7 +10,7 @@ class AuthController extends BaseController {
       password,
     });
 
-    await authService.saveRefreshToken(user.user_id, refreshToken);
+    await AuthService.saveRefreshToken(user.user_id, refreshToken);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -33,12 +22,15 @@ class AuthController extends BaseController {
     return this.sendSuccess(res, { user, accessToken, refreshToken });
   });
 
-  logout = BaseController.handle((req, res) => {
+  logout = BaseController.handle(async (req, res) => {
     res.clearCookie("refreshToken", {
       httpOnly: true,
       sameSite: "Strict",
       secure: process.env.NODE_ENV === "production",
     });
+
+    await AuthService.deleteRefreshToken(req.userId);
+
     return this.sendSuccess(res, { message: "Logout successful" });
   });
 
@@ -59,7 +51,7 @@ class AuthController extends BaseController {
       throw err;
     }
 
-    const saved = await authService.getRefreshToken(payload.userId);
+    const saved = await AuthService.getRefreshToken(payload.userId);
     if (saved !== token) {
       const err = new Error("Refresh token not recognized");
       err.status = 401;

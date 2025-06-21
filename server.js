@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -7,11 +8,16 @@ const chalk = require("chalk");
 
 const authRoutes = require("./src/routes/authRoutes");
 const userRoutes = require("./src/routes/userRoutes");
+const rewardRoutes = require("./src/routes/rewardRoutes");
+const documentRoutes = require("./src/routes/documentRoutes");
+const applicationRoutes = require("./src/routes/applicationRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
 
 const app = express();
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || "localhost";
+
+app.use(helmet());
 
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
@@ -31,6 +37,9 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/rewards", rewardRoutes);
+app.use("/applications", applicationRoutes);
+app.use("/applications", documentRoutes);
 
 app.use(errorHandler);
 
