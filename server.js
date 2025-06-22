@@ -12,6 +12,7 @@ const rewardRoutes = require("./src/routes/rewardRoutes");
 const documentRoutes = require("./src/routes/documentRoutes");
 const applicationRoutes = require("./src/routes/applicationRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
+const { uploadFile } = require("./src/controllers/uploadFileController");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -40,6 +41,7 @@ app.use("/users", userRoutes);
 app.use("/rewards", rewardRoutes);
 app.use("/applications", applicationRoutes);
 app.use("/applications", documentRoutes);
+app.use("/uploads", uploadFile)
 
 app.use(errorHandler);
 
