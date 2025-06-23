@@ -2,20 +2,20 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
-const userExistenceMiddleware = require("../middleware/userExistenceMiddleware");
+const checkUserExists = require("../middleware/checkUserExists");
 const UserController = require("../controllers/userController");
 
 router.get(
   "/me",
   authMiddleware,
-  userExistenceMiddleware,
+  checkUserExists,
   UserController.getMe
 );
 
 router.get(
   "/:id",
   authMiddleware,
-  userExistenceMiddleware,
+  checkUserExists,
   UserController.getById
 );
 

@@ -12,7 +12,7 @@ class UserRepository {
 
   findById = async (userId) => {
     const user = await db(this.userTable)
-      .select("user_id", "username", "email", "first_name", "last_name")
+      .select("user_id", "username", "email", "created_at")
       .where({ user_id: userId })
       .first();
 
@@ -66,7 +66,7 @@ class UserRepository {
       await trx(this.userRolesTable).insert(userRolesInserts);
 
       const createdUser = await trx(this.userTable)
-        .select("user_id", "username", "email", "first_name", "last_name")
+        .select("user_id", "username", "email", "created_at")
         .where({ user_id: userId })
         .first();
 

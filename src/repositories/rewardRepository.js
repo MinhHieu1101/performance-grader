@@ -7,13 +7,13 @@ class RewardRepository {
 
   findAll = async () =>
     db(this.table)
-      .select("reward_id", "name", "description", "effective_date")
-      .orderBy("effective_date", "desc");
+      .select("reward_id", "name", "description", "created_at")
+      .orderBy("created_at", "desc");
 
-  findById = async (rewardId) =>
+  findById = async (rewardId, roleId) =>
     db(this.table)
-      .select("reward_id", "name", "description", "effective_date")
-      .where({ reward_id: rewardId })
+      .select("reward_id", "name", "description", "created_at")
+      .where({ reward_id: rewardId, role_id: roleId })
       .first();
 }
 

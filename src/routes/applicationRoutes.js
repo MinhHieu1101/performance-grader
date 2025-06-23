@@ -6,12 +6,12 @@ const checkRewardExists = require("../middleware/checkRewardExists");
 const checkAllCriteriaFulfilled = require("../middleware/checkAllCriteriaFulfilled");
 const authorizeRoles = require("../middleware/authorizeRoles");
 const ApplicationController = require("../controllers/applicationController");
-const userExistenceMiddleware = require("../middleware/userExistenceMiddleware");
+const checkUserExists = require("../middleware/checkUserExists");
 
 router.post(
   "/rewards/:rewardId/submit",
   authMiddleware,
-  userExistenceMiddleware,
+  checkUserExists,
   authorizeRoles("employee", "manager"),
   checkRewardExists,
   checkAllCriteriaFulfilled,
@@ -21,7 +21,7 @@ router.post(
 router.post(
   "/performance/:rewardId/submit",
   authMiddleware,
-  userExistenceMiddleware,
+  checkUserExists,
   authorizeRoles("staff"),
   checkRewardExists,
   checkAllCriteriaFulfilled,

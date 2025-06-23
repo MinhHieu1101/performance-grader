@@ -1,12 +1,10 @@
 CREATE TABLE
     users (
         user_id UUID PRIMARY KEY,
-        username VARCHAR(50) NOT NULL UNIQUE,
+        username VARCHAR(100) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
-        first_name VARCHAR(50) NOT NULL,
-        last_name VARCHAR(50) NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW (),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW ()
     );
 
 CREATE TABLE
@@ -14,7 +12,7 @@ CREATE TABLE
         role_id SERIAL PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         description VARCHAR(255),
-        created_at TIMESTAMP NOT NULL DEFAULT NOW (),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW ()
     );
 
 CREATE TABLE
@@ -40,6 +38,7 @@ CREATE TABLE
 CREATE TABLE
     rewards (
         reward_id SERIAL PRIMARY KEY,
+        role_id INT NOT NULL,
         name VARCHAR(255) NOT NULL UNIQUE,
         description TEXT,
         created_at TIMESTAMP NOT NULL DEFAULT NOW ()

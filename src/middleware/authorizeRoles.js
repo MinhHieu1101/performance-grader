@@ -2,7 +2,7 @@ module.exports = (...allowedRoles) => {
   return (req, res, next) => {
     const user = req.user;
     if (!user) {
-      const err = new Error("User not loaded");
+      const err = new Error("User not available in request");
       err.status = 500;
       return next(err);
     }

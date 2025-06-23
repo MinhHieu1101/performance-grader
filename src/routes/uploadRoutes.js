@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
-const userExistenceMiddleware = require("../middleware/userExistenceMiddleware");
+const checkUserExists = require("../middleware/checkUserExists");
 const UploadController = require("../controllers/uploadFileController");
 
 router.post("/", 
       authMiddleware,
-      userExistenceMiddleware,
+      checkUserExists,
       UploadController.uploadFile);
 
 module.exports = router;
