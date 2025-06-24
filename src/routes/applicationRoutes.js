@@ -12,7 +12,7 @@ router.post(
   "/rewards/:rewardId/submit",
   authMiddleware,
   checkUserExists,
-  authorizeRoles("employee", "manager"),
+  authorizeRoles("nhanvien", "quanly", "admin"),
   checkRewardExists,
   checkAllCriteriaFulfilled,
   ApplicationController.submitReward
@@ -22,7 +22,7 @@ router.post(
   "/performance/:rewardId/submit",
   authMiddleware,
   checkUserExists,
-  authorizeRoles("staff"),
+  authorizeRoles("nhanvien", "quanly", "admin"),
   checkRewardExists,
   checkAllCriteriaFulfilled,
   ApplicationController.submitPerformance

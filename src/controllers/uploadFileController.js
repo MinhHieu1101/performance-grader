@@ -17,7 +17,10 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
   },
 });
 
@@ -26,16 +29,13 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB (adjust as needed)
   fileFilter: function (req, file, cb) {
     // Allowed file types: PDF and CSV
-    const allowedMimeTypes = ['application/pdf', 'text/csv',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX,
-        'application/msword' // DOC
+    const allowedMimeTypes = [
+      "application/pdf",
+      "text/csv",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX,
+      "application/msword", // DOC
     ]; // MIME types for PDF and CSV
-    const allowedExtnames = [
-      '.pdf',
-      '.csv',
-      '.doc',
-      '.docx'
-    ];
+    const allowedExtnames = [".pdf", ".csv", ".doc", ".docx"];
     // Check MIME type
     const isMimeTypeAllowed = allowedMimeTypes.includes(file.mimetype);
 
@@ -57,7 +57,7 @@ class UploadController extends BaseController {
     upload.single("file"), // Assuming 'file' is the input field name
     BaseController.handle((req, res) => {
       if (!req.file) {
-        return this.sendError(res, new Error("No file selected or uploaded."), "No file uploaded", 400);
+        return this.sendError(res, new Error("No file selected or uploaded."));
       }
 
       const fileInfo = {
@@ -66,7 +66,7 @@ class UploadController extends BaseController {
         mimetype: req.file.mimetype,
         size: req.file.size,
         path: req.file.path,
-        url: `/uploads/${req.file.filename}`
+        url: `/uploads/${req.file.filename}`,
       };
 
       return this.sendSuccess(res, fileInfo, 200);
@@ -77,20 +77,24 @@ class UploadController extends BaseController {
     upload.array("files", 10), // Assuming 'files' is the input field name for multiple uploads
     BaseController.handle((req, res) => {
       if (!req.files || req.files.length === 0) {
-        return this.sendError(res, new Error("No files selected or uploaded."), "No files uploaded", 400);
+        return this.sendError(res, new Error("No files selected or uploaded."));
       }
 
-      const filesInfo = req.files.map(file => ({
+      const filesInfo = req.files.map((file) => ({
         filename: file.filename,
         originalname: file.originalname,
         mimetype: file.mimetype,
         size: file.size,
         path: file.path,
-        url: `/uploads/${file.filename}`
+        url: `/uploads/${file.filename}`,
       }));
 
-      return this.sendSuccess(res, filesInfo, `${filesInfo.length} files uploaded successfully!`);
-    })
+      return this.sendSuccess(
+        res,
+        filesInfo,
+        `${filesInfo.length} files uploaded successfully!`
+      );
+    }),
   ];
 }
 

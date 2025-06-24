@@ -1,7 +1,7 @@
 const documentRepo = require("../repositories/documentRepository");
 
 class DocumentService {
-  updateStatus = async ({ documentId, adminId, status }) => {
+  updateStatus = async ({ documentId, status, remarks }) => {
     const allowed = ["Approved", "Rejected"];
     if (!allowed.includes(status)) {
       const err = new Error(`Invalid status: ${status}`);
@@ -9,17 +9,10 @@ class DocumentService {
       throw err;
     }
 
-    const doc = await documentRepo.findById(documentId);
-    if (!doc) {
-      const err = new Error(`Document ${documentId} not found`);
-      err.status = 404;
-      throw err;
-    }
-
     const updated = await documentRepo.updateStatus(documentId, {
       status,
-      reviewed_by: adminId,
       reviewed_at: new Date(),
+      remarks,
     });
     return updated;
   };

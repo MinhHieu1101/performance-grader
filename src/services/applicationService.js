@@ -17,7 +17,7 @@ class ApplicationService {
             {
               user_id: userId,
               application_id: app.application_id,
-              criterion_id: d.criteriaId,
+              criterion_id: d.criterionId,
               file_name: d.fileName,
               file_path: d.fileName,
               status: "Pending",
@@ -31,10 +31,10 @@ class ApplicationService {
     });
   };
 
-  submitPerformanceApp = async ({ userId, formId, remarks, fileName }) => {
+  submitPerformanceApp = async ({ userId, rewardId, remarks, fileName }) => {
     return await db.transaction(async (trx) => {
       const app = await applicationRepo.create(
-        { user_id: userId, reward_id: formId, type: "performance", remarks },
+        { user_id: userId, reward_id: rewardId, type: "performance", remarks },
         { trx }
       );
       await documentRepo.create(
@@ -54,7 +54,7 @@ class ApplicationService {
 
   submitDocuments = async ({ userId, applicationId, docs }) => {
     // docs = [ { criteriaId, fileName } ]
-    
+
     return Promise.all(
       docs.map((d) =>
         documentRepo.create({

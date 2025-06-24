@@ -7,7 +7,7 @@ class ApplicationController extends BaseController {
     const userId = req.userId;
     const { rewardId } = req.params;
     const { remarks, documents } = req.body;
-    // documents: [{ criteriaId, fileName }, …]
+    // documents: [{ criterionId, fileName }, …]
 
     const app = await applicationService.submitRewardApp({
       userId,
@@ -15,11 +15,12 @@ class ApplicationController extends BaseController {
       remarks,
     });
 
-    await applicationService.submitDocuments({
+    // redundant check, as this is done in the service => can be moved elsewhere
+    /* await applicationService.submitDocuments({
       userId,
       applicationId: app.application_id,
       docs: documents,
-    });
+    }); */
 
     return this.sendSuccess(res, app, 201);
   });
@@ -27,20 +28,26 @@ class ApplicationController extends BaseController {
   // POST /performance/:rewardId/submit
   submitPerformance = BaseController.handle(async (req, res) => {
     const userId = req.userId;
-    const { formId } = req.params;
-    const { remarks, fileName } = req.body;
+    const { rewardId } = req.params;
+    const { remarks, file } = req.body;
 
     const app = await applicationService.submitPerformanceApp({
       userId,
-      formId: Number(formId),
+      rewardId: Number(rewardId),
       remarks,
     });
 
-    await applicationService.submitDocuments({
+    // redundant check, as this is done in the service => can be moved elsewhere
+    /* await applicationService.submitDocuments({
       userId,
       applicationId: app.application_id,
-      fileName,
-    });
+      docs: [
+        {
+          criterionId: null, // need to review this
+          fileName: file,
+        },
+      ],
+    }); */
 
     return this.sendSuccess(res, app, 201);
   });

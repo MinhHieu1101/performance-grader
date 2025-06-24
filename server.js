@@ -11,8 +11,8 @@ const userRoutes = require("./src/routes/userRoutes");
 const rewardRoutes = require("./src/routes/rewardRoutes");
 const documentRoutes = require("./src/routes/documentRoutes");
 const applicationRoutes = require("./src/routes/applicationRoutes");
+const uploadRoutes = require("./src/routes/uploadRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
-const { uploadFile } = require("./src/controllers/uploadFileController");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -38,11 +38,10 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/rewards", rewardRoutes);
+app.use("/:roleId/rewards", rewardRoutes);
 app.use("/applications", applicationRoutes);
-app.use("/applications", documentRoutes);
-app.use("/uploads", uploadFile)
-
+app.use("/documents", documentRoutes);
+app.use("/uploads", uploadRoutes);
 app.use(errorHandler);
 
 app.listen(port, host, () => {

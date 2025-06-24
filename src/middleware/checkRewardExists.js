@@ -1,13 +1,13 @@
 const rewardRepo = require("../repositories/rewardRepository");
 
 module.exports = async (req, res, next) => {
-  const rewardId = Number(req.params.rewardId);
+  const { rewardId, roleId } = req.params;
   if (Number.isNaN(rewardId)) {
     const err = new Error("Invalid rewardId");
     err.status = 400;
     return next(err);
   }
-  const reward = await rewardRepo.findById(rewardId);
+  const reward = await rewardRepo.findById(rewardId, roleId);
   if (!reward) {
     const err = new Error(`Reward ${rewardId} not found`);
     err.status = 404;

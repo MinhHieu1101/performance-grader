@@ -4,9 +4,6 @@ const authMiddleware = require("../middleware/authMiddleware");
 const checkUserExists = require("../middleware/checkUserExists");
 const UploadController = require("../controllers/uploadFileController");
 
-router.post("/", 
-      authMiddleware,
-      checkUserExists,
-      UploadController.uploadFile);
+router.post("/", authMiddleware, checkUserExists, UploadController.uploadFile);
 
 module.exports = router;

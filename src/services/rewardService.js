@@ -2,8 +2,8 @@ const rewardRepo = require("../repositories/rewardRepository");
 const criteriaRepo = require("../repositories/criteriaRepository");
 
 class RewardService {
-  listRewards = async () => {
-    return rewardRepo.findAll();
+  listRewards = async (roleId) => {
+    return rewardRepo.findAll(roleId);
   };
 
   listCriteria = async (rewardId, roleId) => {
