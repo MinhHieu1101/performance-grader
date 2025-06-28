@@ -28,4 +28,19 @@ router.post(
   ApplicationController.submitPerformance
 );
 
+router.get(
+  "/applications/:userId/:year",
+  authMiddleware,
+  authorizeRoles("nhanvien", "quanly", "admin"),
+  checkUserExists,
+  ApplicationController.getApplicationByUserAndYear
+);
+
+router.put(
+  "/applications/:applicationId",
+  authMiddleware,
+  authorizeRoles("nhanvien", "quanly", "admin"),
+  ApplicationController.updateApplication
+);
+
 module.exports = router;
