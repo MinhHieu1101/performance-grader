@@ -6,8 +6,10 @@ const checkRewardExists = require("../middleware/checkRewardExists");
 const checkUserExists = require("../middleware/checkUserExists");
 
 router.use(authMiddleware, checkUserExists);
-router.get("/", RewardController.getAll);
-router.use(checkRewardExists);
-router.get("/:rewardId/criteria", RewardController.getCriteria);
+router.route("/roles/:roleId").get(RewardController.getAll);
+router
+  .route("/criteria/:rewardId")
+  .all(checkRewardExists)
+  .get(RewardController.getCriteria);
 
 module.exports = router;

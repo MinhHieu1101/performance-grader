@@ -6,11 +6,11 @@ class RewardService {
     return rewardRepo.findAll(roleId);
   };
 
-  listCriteria = async (rewardId, roleId) => {
-    const reward = await rewardRepo.findById(rewardId, roleId);
+  listCriteria = async (rewardId) => {
+    const reward = await rewardRepo.findById(rewardId);
     if (!reward) {
       const err = new Error(
-        `Reward with ID ${rewardId} for role ${roleId} not found`
+        `Reward with ID ${rewardId} not found`
       );
       err.status = 404;
       throw err;

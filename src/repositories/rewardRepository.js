@@ -11,10 +11,10 @@ class RewardRepository {
       .where({ role_id: roleId })
       .orderBy("created_at", "desc");
 
-  findById = async (rewardId, roleId) =>
+  findById = async (rewardId) =>
     db(this.table)
       .select("reward_id", "name", "description", "created_at")
-      .where({ reward_id: rewardId, role_id: roleId })
+      .where({ reward_id: rewardId })
       .first();
 }
 

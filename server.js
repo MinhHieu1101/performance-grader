@@ -38,7 +38,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/:roleId/rewards", rewardRoutes);
+app.use("/rewards", rewardRoutes);
 app.use("/applications", applicationRoutes);
 app.use("/documents", documentRoutes);
 app.use("/uploads", uploadRoutes);

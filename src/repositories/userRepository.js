@@ -5,6 +5,7 @@ class UserRepository {
   constructor() {
     this.userTable = "users";
     this.roleTable = "roles";
+    this.departmentTable = "departments";
     this.userRolesTable = "user_roles";
   }
 
@@ -18,7 +19,9 @@ class UserRepository {
 
     if (!user) return null;
 
+    // NEED TO verify and define roles HERE
     const roles = await db(this.roleTable)
+      .select("role_id", "department_id")
       .join(
         this.userRolesTable,
         `${this.roleTable}.role_id`,
@@ -31,6 +34,7 @@ class UserRepository {
     return { ...user, roles };
   };
 
+  // DEAL WITH departments later
   create = async ({ username, email, password, roles }) => {
     const userId = uuidv4();
 

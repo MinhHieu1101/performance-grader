@@ -2,17 +2,17 @@ const BaseController = require("./BaseController");
 const rewardService = require("../services/rewardService");
 
 class RewardController extends BaseController {
-  // GET /:roleId/rewards
+  // GET /rewards/roles/:roleId
   getAll = BaseController.handle(async (req, res) => {
     const { roleId } = req.params;
     const rewards = await rewardService.listRewards(roleId);
     return this.sendSuccess(res, rewards);
   });
 
-  // GET /:roleId/rewards/:rewardId/criteria
+  // GET /rewards/criteria/:rewardId
   getCriteria = BaseController.handle(async (req, res) => {
-    const { rewardId, roleId } = req.params;
-    const criteria = await rewardService.listCriteria(rewardId, roleId);
+    const { rewardId } = req.params;
+    const criteria = await rewardService.listCriteria(rewardId);
     return this.sendSuccess(res, criteria);
   });
 }
