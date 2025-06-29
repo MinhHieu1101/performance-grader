@@ -68,6 +68,14 @@ class ApplicationService {
       )
     );
   };
+
+  getApplicaionByUserAndYear = async (userId, year) => {
+    return await applicationRepo.findByUserAndYear(userId, year);
+  };
+
+  updateApplication = async (applicationId, data) => {
+    return await applicationRepo.update(applicationId, data);
+  };
 }
 
 module.exports = new ApplicationService();

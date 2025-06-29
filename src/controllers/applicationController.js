@@ -51,6 +51,32 @@ class ApplicationController extends BaseController {
 
     return this.sendSuccess(res, app, 201);
   });
+
+  // GET /applications/:userId/:year
+  getApplicationByUserAndYear = BaseController.handle(async (req, res) => {
+    const userId = req.params.userId;
+    const year = req.params.year;
+
+    const applications = await applicationService.getApplicaionByUserAndYear(
+      userId,
+      year
+    );
+
+    return this.sendSuccess(res, applications);
+  });
+
+  // PUT /applications/:applicationId
+  updateApplication = BaseController.handle(async (req, res) => {
+    const applicationId = req.params.applicationId;
+    const data = req.body;
+
+    const updatedApplication = await applicationService.updateApplication(
+      applicationId,
+      data
+    );
+
+    return this.sendSuccess(res, updatedApplication);
+  });
 }
 
 module.exports = new ApplicationController();
