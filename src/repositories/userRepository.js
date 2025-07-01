@@ -20,7 +20,7 @@ class UserRepository {
     if (!user) return null;
 
     // NEED TO verify and define roles HERE
-    const roles = await db(this.roleTable)
+    /* const roles = await db(this.roleTable)
       .select("role_id", "department_id")
       .join(
         this.userRolesTable,
@@ -29,7 +29,11 @@ class UserRepository {
         `${this.userRolesTable}.role_id`
       )
       .select(`${this.roleTable}.role_id`, `${this.roleTable}.name`)
-      .where({ [`${this.userRolesTable}.user_id`]: userId });
+      .where({ [`${this.userRolesTable}.user_id`]: userId }); */
+    
+    // only get the roles for now
+    const roles = await db(this.roleTable)
+      .select("role_id", "name");
 
     return { ...user, roles };
   };
