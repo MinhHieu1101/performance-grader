@@ -4,6 +4,33 @@ const documentRepo = require("../repositories/documentRepository");
 module.exports = async (req, res, next) => {
   const userId = req.userId;
   const rewardId = Number(req.params.rewardId);
+  const priority_level = req.body.priority_level;
+
+  const uploadingDocs = req.body.documents;
+  if (
+    !uploadingDocs ||
+    !Array.isArray(uploadingDocs) ||
+    uploadingDocs.length === 0
+  ) {
+    const err = new Error("No documents provided");
+    err.status = 400;
+    return next(err);
+  }
+
+  const existingDocs = await documentRepo.findByUserAndRewardCriteria(
+    userId,
+    rewardId
+  );
+  // compare existing documents with the ones being uploaded
+  const existingDocNames = existingDocs.map((doc) => doc.filename);
+  const newDocs = uploadingDocs.filter(
+    (doc) => !existingDocNames.includes(doc.filename)
+  );
+  if (newDocs.length === 0) {
+    const err = new Error("No new documents to upload");
+    err.status = 400;
+    return next(err);
+  }
 
   const criteriaList = await criteriaRepo.findByRewardId(rewardId);
   if (!criteriaList.length) {
@@ -12,21 +39,15 @@ module.exports = async (req, res, next) => {
     return next(err);
   }
 
-  const docs = await documentRepo.findByUserAndRewardCriteria(userId, rewardId);
+  if (priority_level) {
+    criteriaList = criteriaList.filter(
+      (criterion) => criterion.priority_level === priority_level
+    );
+  }
 
-  // check approved documents for each criteria
-  const approvedByCriteria = new Set(
-    docs.filter((d) => d.status === "Approved").map((d) => d.criterion_id)
-  );
-  const missing = criteriaList
-    .map((c) => c.criterion_id)
-    .filter((id) => !approvedByCriteria.has(id));
-
-  if (missing.length) {
+  if (uploadingDocs.length !== criteriaList.length) {
     const err = new Error(
-      `You must upload & have approved documents for all criteria. Missing: ${missing.join(
-        ", "
-      )}`
+      `You must upload documents for all criteria. Uploaded: ${uploadingDocs.length}, Required: ${criteriaList.length}`
     );
     err.status = 400;
     return next(err);

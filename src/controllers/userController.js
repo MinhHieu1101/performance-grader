@@ -16,12 +16,11 @@ class UserController extends BaseController {
   });
 
   register = BaseController.handle(async (req, res) => {
-    const { username, email, password, roles } = req.body;
+    const { username, email, password } = req.body;
     const user = await userService.register({
       username,
       email,
       password,
-      roles,
     });
     return this.sendSuccess(res, user, 201);
   });

@@ -11,7 +11,7 @@ class CriteriaRepository {
         "criterion_id",
         "name",
         "description",
-        "is_mandatory",
+        "priority_level",
         "created_at"
       )
       .where({ reward_id: rewardId })
