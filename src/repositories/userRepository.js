@@ -43,13 +43,19 @@ class UserRepository {
 
       const defaultRole = await trx(this.roleTable)
         .select("role_id", "name", "description")
-        .where({ name: "canhan" })
+        .where({ role_id: 1 })
         .first();
 
-      await trx(this.userRolesTable).insert({
-        user_id: userId,
-        role_id: defaultRole.role_id,
-      });
+      const existingUserRole = await trx(this.userRolesTable)
+        .where({ user_id: userId, role_id: defaultRole.role_id })
+        .first();
+
+      if (!existingUserRole) {
+        await trx(this.userRolesTable).insert({
+          user_id: userId,
+          role_id: defaultRole.role_id,
+        });
+      }
 
       const createdUser = await trx(this.userTable)
         .select("user_id", "username", "email", "created_at")
@@ -59,7 +65,6 @@ class UserRepository {
       const assignedRoles = {
         role_id: defaultRole.role_id,
         name: defaultRole.description,
-        department: defaultRole.department,
       };
 
       return { ...createdUser, roles: assignedRoles };
