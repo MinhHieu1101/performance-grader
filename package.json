@@ -7,6 +7,7 @@
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
+    "seed": "cd script && node seedRewards.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development nodemon server.js"
   },
@@ -20,14 +21,16 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.5.0",
+    "csv-parse": "^6.0.0",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "morgan": "^1.10.0",
     "multer": "^2.0.1",
-    "pg": "^8.16.0",
+    "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
     "uuid": "^11.1.0"
   }

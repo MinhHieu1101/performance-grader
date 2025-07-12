@@ -1,0 +1,18 @@
+TRUNCATE TABLE rewards
+  RESTART IDENTITY
+  CASCADE;
+
+ALTER TABLE rewards
+  DROP CONSTRAINT IF EXISTS fk_rewards_role;
+
+ALTER TABLE rewards
+  DROP COLUMN IF EXISTS role_id;
+
+ALTER TABLE rewards
+  ADD COLUMN type VARCHAR(255) NOT NULL;
+
+ALTER TABLE rewards
+  DROP CONSTRAINT IF EXISTS rewards_name_key;
+
+ALTER TABLE rewards
+  ADD CONSTRAINT uq_rewards_type_name UNIQUE (type, name);
