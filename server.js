@@ -13,6 +13,7 @@ const documentRoutes = require("./src/routes/documentRoutes");
 const applicationRoutes = require("./src/routes/applicationRoutes");
 const uploadRoutes = require("./src/routes/uploadRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
+const surveyRoutes = require("./src/routes/surveyRoutes");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -24,7 +25,11 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-const allowedOrigins = ["http://localhost:5173", "*"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://68fc03a90fcd.ngrok-free.app/",
+  "*",
+];
 
 const corsOptions = {
   origin: allowedOrigins,
@@ -42,6 +47,7 @@ app.use("/rewards", rewardRoutes);
 app.use("/applications", applicationRoutes);
 app.use("/documents", documentRoutes);
 app.use("/uploads", uploadRoutes);
+app.use("/surveys", surveyRoutes);
 app.use(errorHandler);
 
 app.listen(port, host, () => {

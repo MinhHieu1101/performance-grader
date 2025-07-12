@@ -4,6 +4,7 @@ const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const checkUserExists = require("../middleware/checkUserExists");
 const UserController = require("../controllers/userController");
+const surveyController = require("../controllers/surveyController");
 
 router.get(
   "/me",
