@@ -22,7 +22,7 @@ class UserRepository {
       .select(
         "r.role_id as role_id",
         "r.description as name",
-        "r.department as department"
+        "ur.department as department"
       )
       .join({ ur: this.userRolesTable }, "r.role_id", "ur.role_id")
       .where("ur.user_id", userId);
@@ -42,7 +42,7 @@ class UserRepository {
       });
 
       const defaultRole = await trx(this.roleTable)
-        .select("role_id", "name", "description", "department")
+        .select("role_id", "name", "description")
         .where({ name: "canhan" })
         .first();
 
