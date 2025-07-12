@@ -5,11 +5,14 @@ class RewardRepository {
     this.table = "rewards";
   }
 
-  findAll = async (roleId) =>
-    db(this.table)
+  findAll = async (roleId) => {
+    const type = roleId == 1 ? "Cá nhân" : "Tập thể";
+    const query = db(this.table)
       .select("reward_id", "name", "description", "created_at")
-      .where({ role_id: roleId })
-      .orderBy("created_at", "desc");
+      .where({ type: type })
+      .orderBy("reward_id", "asc");
+    return query;
+  };
 
   findById = async (rewardId) =>
     db(this.table)
