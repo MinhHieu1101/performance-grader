@@ -15,6 +15,7 @@ class UserController extends BaseController {
     return this.sendSuccess(res, user);
   });
 
+  // POST /users/register
   register = BaseController.handle(async (req, res) => {
     const { username, email, password, phone_number } = req.body;
     const user = await userService.register({

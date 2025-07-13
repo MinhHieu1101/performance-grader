@@ -22,34 +22,15 @@ class AuthService {
     const accessToken = jwt.sign(
       { userId: user.user_id },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30m" }
+      { expiresIn: "7d" }
     );
     const refreshToken = jwt.sign(
       { userId: user.user_id },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "60d" }
     );
 
     return { user, accessToken, refreshToken };
-  };
-
-  saveRefreshToken = async (userId, token) => {
-    return db("refresh_tokens")
-      .insert({ user_id: userId, token })
-      .onConflict("user_id")
-      .merge();
-  };
-
-  getRefreshToken = async (userId) => {
-    const row = await db("refresh_tokens")
-      .select("token")
-      .where({ user_id: userId })
-      .first();
-    return row?.token;
-  };
-
-  deleteRefreshToken = async (userId) => {
-    return db("refresh_tokens").where({ user_id: userId }).del();
   };
 }
 
