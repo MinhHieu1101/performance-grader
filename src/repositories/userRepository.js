@@ -12,7 +12,7 @@ class UserRepository {
 
   findById = async (userId) => {
     const user = await db(this.userTable)
-      .select("user_id", "username", "email", "created_at")
+      .select("user_id", "username", "email", "phone_number", "created_at")
       .where({ user_id: userId })
       .first();
 
@@ -30,7 +30,7 @@ class UserRepository {
     return { ...user, roles };
   };
 
-  create = async ({ username, email, password }) => {
+  create = async ({ username, email, password, phone_number }) => {
     const userId = uuidv4();
 
     return db.transaction(async (trx) => {
@@ -39,6 +39,7 @@ class UserRepository {
         username,
         email,
         password,
+        phone_number,
       });
 
       const defaultRole = await trx(this.roleTable)
@@ -58,7 +59,7 @@ class UserRepository {
       }
 
       const createdUser = await trx(this.userTable)
-        .select("user_id", "username", "email", "created_at")
+        .select("user_id", "username", "email", "phone_number", "created_at")
         .where({ user_id: userId })
         .first();
 

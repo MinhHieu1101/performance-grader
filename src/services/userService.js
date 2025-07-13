@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const userRepo = require("../repositories/userRepository");
 
 class UserService {
-  register = async ({ username, email, password }) => {
+  register = async ({ username, email, password, phone_number }) => {
     const existing = await userRepo.findByEmail(email);
     if (existing) {
       const err = new Error("Email already in use");
@@ -18,6 +18,7 @@ class UserService {
       username,
       email,
       password: hash,
+      phone_number,
     });
 
     return user;
