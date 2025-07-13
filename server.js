@@ -27,8 +27,8 @@ if (process.env.NODE_ENV !== "production") {
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://68fc03a90fcd.ngrok-free.app/",
-  "*",
+  "https://a706bf20ada7.ngrok-free.app",
+  "*"
 ];
 
 const corsOptions = {

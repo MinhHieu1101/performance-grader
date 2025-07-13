@@ -4,8 +4,9 @@ class SurveyService {
     const surveyData = await surveyRepo.getSurveyDetails();
     return surveyData;
   };
-  updateSurvey = async ({ surveyId, updates }) => {
-    const updatedSurvey = await surveyRepo.updateSurvey(surveyId, updates);
+  submitSurvey = async (userId, surveyData) => {
+    
+    const updatedSurvey = await surveyRepo.submitSurvey(userId, surveyData);
     return updatedSurvey;
   };
 }
