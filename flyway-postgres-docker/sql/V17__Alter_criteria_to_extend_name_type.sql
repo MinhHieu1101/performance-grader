@@ -1,0 +1,2 @@
+ALTER TABLE criteria
+  ALTER COLUMN name TYPE TEXT;
