@@ -12,7 +12,7 @@ router.post(
   "/rewards/:rewardId/submit",
   authMiddleware,
   checkUserExists,
-  authorizeRoles("nhanvien", "quanly", "admin"),
+  authorizeRoles,
   checkRewardExists,
   checkAllCriteriaFulfilled,
   ApplicationController.submitReward
@@ -22,7 +22,7 @@ router.post(
   "/performance/:rewardId/submit",
   authMiddleware,
   checkUserExists,
-  authorizeRoles("nhanvien", "quanly", "admin"),
+  authorizeRoles,
   checkRewardExists,
   checkAllCriteriaFulfilled,
   ApplicationController.submitPerformance
@@ -31,7 +31,7 @@ router.post(
 router.get(
   "/applications/:userId/:year",
   authMiddleware,
-  authorizeRoles("nhanvien", "quanly", "admin"),
+  authorizeRoles,
   checkUserExists,
   ApplicationController.getApplicationByUserAndYear
 );
@@ -39,7 +39,7 @@ router.get(
 router.put(
   "/applications/:applicationId",
   authMiddleware,
-  authorizeRoles("nhanvien", "quanly", "admin"),
+  authorizeRoles,
   ApplicationController.updateApplication
 );
 

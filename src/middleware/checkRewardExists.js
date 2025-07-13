@@ -2,7 +2,7 @@ const rewardRepo = require("../repositories/rewardRepository");
 
 module.exports = async (req, res, next) => {
   const { rewardId } = req.params;
-  if (Number.isNaN(rewardId)) {
+  if (Number.isNaN(rewardId) || rewardId < 1 || rewardId > 34) {
     const err = new Error("Invalid rewardId");
     err.status = 400;
     return next(err);

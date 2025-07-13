@@ -71,6 +71,19 @@ class UserRepository {
       return { ...createdUser, roles: assignedRoles };
     });
   };
+
+  getRolesByUserId = async (userId) => {
+    const roles = await db({ r: this.roleTable })
+      .select(
+        "r.role_id as role_id",
+        "r.description as name",
+        "ur.department as department"
+      )
+      .join({ ur: this.userRolesTable }, "r.role_id", "ur.role_id")
+      .where("ur.user_id", userId);
+
+    return roles;
+  };
 }
 
 module.exports = new UserRepository();
