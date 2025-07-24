@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
 
     const roles = await userRepo.getRolesByUserId(userId);
 
-    const hasRole = roles.some((role) => role.role_id === parseInt(roleId));
+    const hasRole = roles.some((role) => role.role_id === parseInt(roleId) || role.role_id === 0);
     if (!hasRole) {
       const err = new Error("Insufficient privileges");
       err.status = 403;

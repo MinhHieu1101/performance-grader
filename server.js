@@ -27,7 +27,8 @@ if (process.env.NODE_ENV !== "production") {
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://a706bf20ada7.ngrok-free.app",
+  "https://7fe88cedc69f.ngrok-free.app",
+  "https://c975dc483469.ngrok-free.app",
   "*"
 ];
 
