@@ -87,15 +87,25 @@ class UserRepository {
 
   updateRoleByUserId = async ({ userId, role_id, department }) => {
     return db.transaction(async (trx) => {
-      const insertData = {
-        user_id: userId,
-        role_id: role_id,
-      };
-      if (department !== undefined) {
-        insertData.department = department;
-      }
+      const existingUserRole = await trx(this.userRolesTable)
+        .where({ user_id: userId, role_id: role_id })
+        .first();
 
-      await trx(this.userRolesTable).insert(insertData);
+      if (!existingUserRole) {
+        const insertData = {
+          user_id: userId,
+          role_id: role_id,
+        };
+        if (department !== undefined) {
+          insertData.department = department;
+        }
+
+        await trx(this.userRolesTable).insert(insertData);
+      } else if (department !== undefined) {
+        await trx(this.userRolesTable)
+          .where({ user_id: userId, role_id: role_id })
+          .update({ department });
+      }
 
       const newAssignedRole = await trx(this.roleTable)
         .select("role_id", "name", "description")
