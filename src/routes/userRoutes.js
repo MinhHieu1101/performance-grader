@@ -5,20 +5,18 @@ const authMiddleware = require("../middleware/authMiddleware");
 const checkUserExists = require("../middleware/checkUserExists");
 const UserController = require("../controllers/userController");
 const surveyController = require("../controllers/surveyController");
+const isAdminMiddleware = require("../middleware/isAdminMiddleware");
 
-router.get(
-  "/me",
+router.get("/me", authMiddleware, checkUserExists, UserController.getMe);
+
+router.patch(
+  "/:id/role",
   authMiddleware,
-  checkUserExists,
-  UserController.getMe
+  isAdminMiddleware,
+  UserController.updateRole
 );
 
-router.get(
-  "/:id",
-  authMiddleware,
-  checkUserExists,
-  UserController.getById
-);
+router.get("/:id", authMiddleware, checkUserExists, UserController.getById);
 
 router.post("/register", UserController.register);
 

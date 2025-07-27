@@ -26,6 +26,31 @@ class UserController extends BaseController {
     });
     return this.sendSuccess(res, user, 201);
   });
+
+  // PATCH /users/:userId/role
+  updateRole = BaseController.handle(async (req, res) => {
+    const { id } = req.params;
+    const { roleId, department } = req.body;
+
+    if (!roleId) {
+      const err = new Error("Role ID is required");
+      err.status = 400;
+      throw err;
+    }
+
+    const updated = await userService.updateUserRole({
+      userId: id,
+      newRoleId: Number(roleId),
+      newDepartment: department,
+    });
+
+    return this.sendSuccess(
+      res,
+      updated,
+      200,
+      `New role has been assigned to user ${id}`,
+    );
+  });
 }
 
 module.exports = new UserController();

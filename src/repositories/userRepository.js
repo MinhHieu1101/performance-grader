@@ -84,6 +84,26 @@ class UserRepository {
 
     return roles;
   };
+
+  updateRoleByUserId = async ({ userId, role_id, department }) => {
+    return db.transaction(async (trx) => {
+      const insertData = {
+        user_id: userId,
+        role_id: role_id,
+      };
+      if (department !== undefined) {
+        insertData.department = department;
+      }
+
+      await trx(this.userRolesTable).insert(insertData);
+
+      const newAssignedRole = await trx(this.roleTable)
+        .select("role_id", "name", "description")
+        .where({ role_id })
+        .first();
+      return newAssignedRole;
+    });
+  };
 }
 
 module.exports = new UserRepository();

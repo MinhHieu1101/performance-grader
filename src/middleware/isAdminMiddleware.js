@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
       throw err;
     }
 
-    if (!user.roles.find((r) => r.name === "admin")) {
+    if (!user.roles.find((r) => r.role_id === 0)) {
       const err = new Error("Admin privileges required");
       err.status = 403;
       throw err;

@@ -62,6 +62,48 @@ class UserService {
     }
     return user;
   };
+
+  updateUserRole = async ({ userId, newRoleId, newDepartment }) => {
+    const allowedRoles = [0, 1, 2, 3, 4, 5];
+
+    if (!allowedRoles.includes(newRoleId)) {
+      const err = new Error(`Role ${newRoleId} not found`);
+      err.status = 404;
+      throw err;
+    }
+
+    const updatingUser = await userRepo.findById(userId);
+    if (!updatingUser) {
+      const err = new Error(`User not found`);
+      err.status = 404;
+      throw err;
+    }
+
+    const hasRole = updatingUser.roles.some(
+      (role) => role.role_id === newRoleId
+    );
+    if (hasRole) {
+      const err = new Error(
+        `Role ${newRoleId} is already assigned to this user`
+      );
+      err.status = 404;
+      throw err;
+    }
+
+    const updated = await userRepo.updateRoleByUserId({
+      userId,
+      role_id: newRoleId,
+      department: newDepartment,
+    });
+
+    if (!updated) {
+      const err = new Error(`No existing role assignment for user ${userId}`);
+      err.status = 404;
+      throw err;
+    }
+
+    return updated;
+  };
 }
 
 module.exports = new UserService();
