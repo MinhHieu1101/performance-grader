@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-const allowedOrigins = [
+/* const allowedOrigins = [
   "http://localhost:3000",
   "*"
 ];
@@ -35,7 +35,15 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); */
+app.use(cors());
+app.use(
+  cors({
+    origin: true, // reflect request origin
+    credentials: true, // allow Set-Cookie
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // parse URL-encoded bodies
 app.use(cookieParser());
